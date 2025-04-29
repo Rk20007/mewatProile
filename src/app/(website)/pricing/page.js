@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 // export const metadata = {
-//   title: "SociaTree | Pricing",
+//   title: "TopProfile | Pricing",
 //   description:
 //     "Share your links, social profiles, contact info and more on one page",
 // };

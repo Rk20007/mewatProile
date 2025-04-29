@@ -1,5 +1,5 @@
 {
-  "name": "linktri",
+  "name": "TopMewatProfile",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -28,6 +28,7 @@
     "next-auth": "^4.24.5",
     "object-copy": "^1.0.0",
     "plain-object-clone": "^2.0.0",
+    "razorpay": "^2.9.6",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",

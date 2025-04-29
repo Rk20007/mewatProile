@@ -14,12 +14,12 @@ export default function Footer() {
             height={40}
             width={40}
           />
-          <span className="font-extrabold text-2xl ml-2">LinkTri</span>
+          <span className="font-extrabold text-2xl ml-2">TopMewatProfile</span>
         </div>
 
         {/* Copyright for mobile */}
         <div className="w-full text-center text-sm text-gray-500 order-3 md:order-2 md:w-auto mt-1 md:mt-0 md:flex-1 md:text-center">
-          © {new Date().getFullYear()} SociaTree. All rights reserved.
+          © {new Date().getFullYear()} TopProfile. All rights reserved.
         </div>
 
         {/* Social Media Icons */}

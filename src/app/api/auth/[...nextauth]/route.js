@@ -14,12 +14,16 @@ export const authOptions = {
   ],
   callbacks: {
     async signIn({ user }) {
-      const allowedEmails = ["robinkhan1122111@gmail.com", "anotheremail@example.com"]; // <-- your allowed emails
+      const client = await clientPromise;
+      const db = client.db();
+      const users = db.collection("users");
 
-      if (allowedEmails.includes(user.email)) {
-        return true; // Allow sign in
+      const existingUser = await users.findOne({ email: user.email });
+
+      if (existingUser?.isPaid) {
+        return true;
       } else {
-        return false; // Deny sign in
+        return false;
       }
     },
   },

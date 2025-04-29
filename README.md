@@ -5,11 +5,11 @@
 
   <img src="./public/banner.png" alt="preview" />
 
-<a href="https://jj-linktri.vercel.app/">Demo</a>
+<a href="https://jj-TopMewatProfile.vercel.app/">Demo</a>
 
 </div>
 
-# Fullstack SociaTree
+# Fullstack TopProfile
 
 This project is a fullstack clone of Linktree built with Next.js, Tailwind CSS, and MongoDB. It allows users to create a personalized page with links to their content across the internet, customize their profile, and view analytics on their links.
 
