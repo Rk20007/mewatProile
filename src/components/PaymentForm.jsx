@@ -7,7 +7,7 @@ export default function PaymentForm({ onProceed, amount,data }) {
     
     
         
-    const razorpayKey = "rzp_test_iEhRalhOoa9F5P"; // Your Razorpay Test API Key
+    const razorpayKey = "rzp_test_VyvBYoTzIiVQM0"; // Your Razorpay Test API Key
 
     useEffect(() => {
         if (window.Razorpay) {

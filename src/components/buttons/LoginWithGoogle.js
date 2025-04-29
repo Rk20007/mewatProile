@@ -20,7 +20,7 @@ export default function LoginWithGoogle() {
   };
   
 
-  const initiatePayment = async () => {
+  const initiatePayment = async (userEmail) => {
     const isLoaded = await loadRazorpayScript();
   
     if (!isLoaded) {
@@ -28,50 +28,65 @@ export default function LoginWithGoogle() {
       return;
     }
   
-    const res = await fetch('/api/razorpayOrder', {
-      method: 'POST',
-    });
-    const { order } = await res.json();
+    try {
+      const res = await fetch('/api/razorpayOrder', {
+        method: 'POST',
+      });
   
-    const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-      amount: order.amount,
-      currency: order.currency,
-      name: "Your Company",
-      description: "₹999 Plan",
-      order_id: order.id,
-      handler: async function (response) {
-        // ✅ Payment Success
-        console.log(response);
-  
-        await fetch('/api/markPaid', {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: paymentDone }) // email idhar actual dalni chahiye
-        });
-  
-        setPaymentDone(true);
-        signIn('google', { callbackUrl: '/account' });
-      },
-      prefill: {
-        email: paymentDone, // (yaha dynamically user email bharwana better rahega)
-      },
-      theme: {
-        color: "#3399cc"
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Razorpay Order API error:", errorText);
+        alert("Something went wrong while creating Razorpay order.");
+        return;
       }
-    };
   
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+      const { order } = await res.json();
+  
+      const options = {
+        key: "rzp_test_wlc06McHQ6sCnZ",
+        amount: order.amount,
+        currency: order.currency,
+        name: "Your Company",
+        description: "₹999 Plan",
+        order_id: order.id,
+        handler: async function (response) {
+          console.log("Payment successful:", response);
+  
+          await fetch('/api/markPaid', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: userEmail }),
+          });
+  
+          setPaymentDone(true); // Now correctly used as boolean
+          signIn('google', { callbackUrl: '/account' });
+        },
+        prefill: {
+          email: userEmail, // correct use of dynamic email
+        },
+        theme: {
+          color: "#3399cc",
+        }
+      };
+  
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error("initiatePayment error:", err);
+      alert("Payment initiation failed. Please try again.");
+    }
   };
+  
   
 
   const handleSignIn = async () => {
     const res = await fetch('/api/checkPaid', {
-      method: 'POST',
+      method: 'GET',
     });
 
     const { isPaid } = await res.json();
+    console.log("isPaid",isPaid);
+    
 
     if (isPaid) {
       // ✅ Already Paid, direct login

@@ -1,13 +1,13 @@
 import Razorpay from "razorpay";
 
 const razorpay = new Razorpay({
-  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_SECRET_KEY,
+  key_id: "rzp_test_wlc06McHQ6sCnZ",
+  key_secret: "LFuh5vpkMbn7UNQ1lQbA3ckr",
 });
 
-export async function POST() {
+export async function POST(req) {
   const payment_capture = 1;
-  const amount = 999 * 100; // ₹999
+  const amount = 999 * 100;
 
   const options = {
     amount: amount,
@@ -15,7 +15,11 @@ export async function POST() {
     payment_capture,
   };
 
-  const order = await razorpay.orders.create(options);
-
-  return Response.json({ order });
+  try {
+    const order = await razorpay.orders.create(options);
+    return Response.json({ order });
+  } catch (error) {
+    console.error("Razorpay Order Error:", error); // show full stack in console
+    return Response.json({ error: error.message || "Order creation failed" }, { status: 500 });
+  }
 }
