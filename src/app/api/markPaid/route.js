@@ -1,11 +1,15 @@
-import clientPromise from "@/libs/mongoClient";
+import { connectToDB } from "@/utils/db";
+import User from "@/models/User";
 
-export async function POST(request) {
-  const { email } = await request.json();
-  const client = await clientPromise;
-  const db = client.db();
-  const users = db.collection("users");
+export async function POST(req) {
+  const { email, paymentId, orderId } = await req.json();
 
-  await users.updateOne({ email }, { $set: { isPaid: true } });
-  return new Response(JSON.stringify({ success: true }), { status: 200 });
+  await connectToDB();
+  await User.findOneAndUpdate({ email }, {
+    isPaid: true,
+    paymentId,
+    orderId,
+  });
+
+  return new Response(JSON.stringify({ success: true }));
 }

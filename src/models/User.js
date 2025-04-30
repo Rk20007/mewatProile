@@ -1,10 +1,12 @@
 import {model, models, Schema} from "mongoose";
 
-const UserSchema = new Schema({
-  name: String,
+const UserSchema = new mongoose.Schema({
   email: String,
-  image: String,
-  emailVerified: Date,
+  name: String,
+  isPaid: { type: Boolean, default: false },
+  paymentId: String,
+  orderId: String,
 });
+
 
 export const User = models?.User || model('User', UserSchema);

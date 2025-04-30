@@ -10,23 +10,32 @@ export default function PurchasePage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status === "loading") return;
+
+    if (status === "unauthenticated" || !session) {
+      router.push("/login"); // 👈 redirect to login if not authenticated
+    } else {
       checkPayment();
     }
-  }, [status]);
+  }, [status, session]);
 
   const checkPayment = async () => {
-    const res = await fetch("/api/checkPaid", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: session.user.email }),
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch("/api/checkPaid", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: session.user.email }),
+      });
+      const data = await res.json();
 
-    if (data.isPaid) {
-      router.push("/account");
-    } else {
-      setLoading(false);
+      if (data.isPaid) {
+        router.push("/account");
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Payment check error:", error);
+      router.push("/login"); // fallback on error
     }
   };
 
@@ -44,23 +53,36 @@ export default function PurchasePage() {
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) return alert("Razorpay SDK failed to load.");
 
-    const res = await fetch("/api/razorpayOrder", { method: "POST" });
+    const res = await fetch("/api/razorpayOrder", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: session.user.email }),
+    });
     const { order } = await res.json();
 
     const options = {
-      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      key: "rzp_test_QL3Va6xfWIsFm7", // Use your live key in production
       amount: order.amount,
       currency: order.currency,
       name: "Your Company",
       description: "₹999 Plan",
       order_id: order.id,
       handler: async function (response) {
-        await fetch("/api/markPaid", {
+        const markRes = await fetch("/api/markPaid", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: session.user.email }),
+          body: JSON.stringify({
+            email: session.user.email,
+            paymentId: response.razorpay_payment_id,
+            orderId: response.razorpay_order_id,
+          }),
         });
-        router.push("/account");
+
+        if (markRes.ok) {
+          router.push("/account");
+        } else {
+          alert("Payment verification failed. Try again.");
+        }
       },
       prefill: {
         email: session.user.email,
