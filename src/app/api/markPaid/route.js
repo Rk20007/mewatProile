@@ -1,4 +1,4 @@
-import { connectToDB } from "@/utils/db";
+import { connectToDB } from "@/libs/mongoClient";
 import User from "@/models/User";
 
 export async function POST(req) {
