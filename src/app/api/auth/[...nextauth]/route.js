@@ -1,10 +1,10 @@
-import clientPromise from "@/libs/mongoClient";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/libs/mongoClient";
 
 export const authOptions = {
-  secret: process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     GoogleProvider({
@@ -13,22 +13,13 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      const client = await clientPromise;
-      const db = client.db();
-      const users = db.collection("users");
-
-      const existingUser = await users.findOne({ email: user.email });
-
-      if (existingUser?.isPaid) {
-        return true;
-      } else {
-        return false;
-      }
+    async session({ session, user }) {
+      session.user.id = user.id;
+      session.user.isPaid = user.isPaid || false;
+      return session;
     },
   },
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

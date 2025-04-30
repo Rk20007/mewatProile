@@ -19,7 +19,7 @@ export default async function Header() {
             height={40}
             width={40}
           />
-          <span className="font-extrabold text-2xl">TopMewatProfile</span>
+          <span className="font-extrabold text-2xl">TopFollowusLink</span>
         </Link>
 
         {/* Desktop Navigation Links - Centered */}

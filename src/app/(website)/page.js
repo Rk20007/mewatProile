@@ -45,9 +45,9 @@ export default async function Home() {
           You never have to change the link in your bio again
         </h1>
         <p>
-          Back in 2016 TopMewatProfile solved social media’s most annoying problem: only
-          having one link in your bio. TopMewatProfile was the first ‘link in bio’
-          platform made to solve this problem. TopMewatProfile has since become so much
+          Back in 2016 TopFollowusLink solved social media’s most annoying problem: only
+          having one link in your bio. TopFollowusLink was the first ‘link in bio’
+          platform made to solve this problem. TopFollowusLink has since become so much
           more. Allowing businesses or creators to get more out of their social
           media, grow their following, easily take payments and take back
           control of how your content is discovered.

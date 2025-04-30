@@ -1,25 +1,21 @@
 import Razorpay from "razorpay";
 
-const razorpay = new Razorpay({
-  key_id: "rzp_test_wlc06McHQ6sCnZ",
-  key_secret: "LFuh5vpkMbn7UNQ1lQbA3ckr",
-});
-
-export async function POST(req) {
-  const payment_capture = 1;
-  const amount = 999 * 100;
+export async function POST() {
+  const razorpay = new Razorpay({
+    key_id: "rzp_test_QL3Va6xfWIsFm7",
+    key_secret: "luPJ9AyR73N2GL2HRajZi4hv",
+  });
 
   const options = {
-    amount: amount,
+    amount: 99900, // ₹999 in paise
     currency: "INR",
-    payment_capture,
+    receipt: `receipt_order_${Date.now()}`,
   };
 
   try {
     const order = await razorpay.orders.create(options);
-    return Response.json({ order });
+    return new Response(JSON.stringify({ order }), { status: 200 });
   } catch (error) {
-    console.error("Razorpay Order Error:", error); // show full stack in console
-    return Response.json({ error: error.message || "Order creation failed" }, { status: 500 });
+    return new Response(JSON.stringify({ error: "Order creation failed" }), { status: 500 });
   }
 }

@@ -14,7 +14,7 @@ export default function Footer() {
             height={40}
             width={40}
           />
-          <span className="font-extrabold text-2xl ml-2">TopMewatProfile</span>
+          <span className="font-extrabold text-2xl ml-2">TopFollowusLink</span>
         </div>
 
         {/* Copyright for mobile */}
